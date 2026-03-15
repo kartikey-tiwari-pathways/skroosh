@@ -96,17 +96,17 @@
     <!-- svelte-ignore event_directive_deprecated -->
     <form on:submit|preventDefault={login} bind:this={loginForm} class="flex flex-col items-center w-full gap-2">
         <p class="text-4xl">Login</p>
-        <input class="bg-[#E8E8E8] rounded-[15px] p-2 text-black placeholder:text-[#808080] w-80" required placeholder="Email..." name="email" />
-        <input class="bg-[#E8E8E8] rounded-[15px] p-2 text-black placeholder:text-[#808080] w-80" required placeholder="Password..." name="password" />
+        <input autocomplete="off" class="bg-[#E8E8E8] rounded-[15px] p-2 text-black placeholder:text-[#808080] w-80" required placeholder="Email..." name="email" />
+        <input autocomplete="off" class="bg-[#E8E8E8] rounded-[15px] p-2 text-black placeholder:text-[#808080] w-80" required placeholder="Password..." name="password" type="password" />
         <button type="submit" class="bg-[#000080] rounded-[15px] text-white px-4 py-2 cursor-pointer">Log in</button>
     </form>
 
     <!-- svelte-ignore event_directive_deprecated -->
     <form on:submit|preventDefault={signup} bind:this={signupForm} class="flex flex-col items-center w-full gap-2">
         <p class="text-4xl">Sign up</p>
-        <input class="bg-[#E8E8E8] rounded-[15px] p-2 text-black placeholder:text-[#808080] w-80" required placeholder="Username..." name="username" />
-        <input class="bg-[#E8E8E8] rounded-[15px] p-2 text-black placeholder:text-[#808080] w-80" required placeholder="Email..." name="email" />
-        <input class="bg-[#E8E8E8] rounded-[15px] p-2 text-black placeholder:text-[#808080] w-80" required placeholder="Password..." name="password" />
+        <input autocomplete="off" class="bg-[#E8E8E8] rounded-[15px] p-2 text-black placeholder:text-[#808080] w-80" required placeholder="Username..." name="username" />
+        <input autocomplete="off" class="bg-[#E8E8E8] rounded-[15px] p-2 text-black placeholder:text-[#808080] w-80" required placeholder="Email..." name="email" />
+        <input autocomplete="off" class="bg-[#E8E8E8] rounded-[15px] p-2 text-black placeholder:text-[#808080] w-80" required placeholder="Password..." name="password" type="password" />
         <button type="submit" class="bg-[#000080] rounded-[15px] text-white px-4 py-2 cursor-pointer">Sign up</button>
     </form>
 

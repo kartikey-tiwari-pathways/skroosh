@@ -49,7 +49,7 @@
 		}
 	}
 	function logout() {
-		signOut();
+		signOut(auth);
 	}
 </script>
 
@@ -99,7 +99,7 @@
 			<div class="flex items-center gap-2">
 				<img src={userImage} alt="user" class="w-10 h-10 rounded-full" />
 				<p class="text-white text-base">Hello {username}!</p>
-				<button onclick={logout} class="bg-[#3A3A3A] rounded-[15px] flex items-center justify-center cursor-pointer p-0.5 hover:bg-[#505050]">
+				<button aria-label="Sign out" onclick={logout} class="bg-[#3A3A3A] rounded-[15px] flex items-center justify-center cursor-pointer p-0.5 hover:bg-[#505050]">
 					<svg xmlns="http://www.w3.org/2000/svg" height="48px" viewBox="0 -960 960 960" width="48px" fill="#FFFFFF"><path d="M180-120q-24 0-42-18t-18-42v-600q0-24 18-42t42-18h299v60H180v600h299v60H180Zm486-185-43-43 102-102H360v-60h363L621-612l43-43 176 176-174 174Z"/></svg>
 				</button>
 			</div>
