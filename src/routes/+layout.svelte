@@ -1,12 +1,56 @@
 <script>
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
+    import userImage from "$lib/assets/user.png";
+    import { auth, db } from '$lib';
+    import { collection, doc, documentId, getDoc, getDocs, query, where } from 'firebase/firestore';
+    import { onAuthStateChanged, signOut } from 'firebase/auth';
+    import { onMount } from 'svelte';
 
 	let { children } = $props();
 
-	// placeholders
-	let accountStatus = false;
-	let communities = [{name: "Maths", id: 123}, {name: "Physics", id: 321}, {name: "Chemistry", id: 9999}];
+	let accountStatus = $state(false);
+	let username = $state(null);
+
+	onAuthStateChanged(auth, user => {
+		accountStatus = !!user;
+		getUsername(user);
+		getUserCommunities();
+	});
+	let communities = $state(null);
+
+	async function getUserCommunities(user) {
+		if (!accountStatus) {
+			communities = null;
+			return 0;
+		}
+		try {
+			const userRef = doc(db, "users", user.uid);
+			const userSnapshot = await getDoc(userRef);
+			const communityList = userSnapshot.data().communities;
+			const communitiesQuery = query(collection(db, "communities"), where(documentId(), "in", communityList));
+			const communitiesSnapshot = await getDocs(communitiesQuery);
+			communitiesSnapshot.forEach(community => {
+				communities = [...communities, {id: community.id, ...community.data()}];
+			});
+		} catch (err) {
+			communities = null;
+			console.error(err);
+		}
+	}
+
+	async function getUsername(user) {
+		try {
+			const userRef = doc(db, "users", user.uid);
+			const userSnapshot = await getDoc(userRef);
+			username = userSnapshot.data().username || "error";
+		} catch (err) {
+			console.error(err);
+		}
+	}
+	function logout() {
+		signOut();
+	}
 </script>
 
 <style>
@@ -52,8 +96,14 @@
 	<!-- Login / Signup -->
 	<div class="flex items-center justify-center ml-73 gap-5">
 		{#if accountStatus}
-			<p>later</p>
-		{:else}
+			<div class="flex items-center gap-2">
+				<img src={userImage} alt="user" class="w-10 h-10 rounded-full" />
+				<p class="text-white text-base">Hello {username}!</p>
+				<button onclick={logout} class="bg-[#3A3A3A] rounded-[15px] flex items-center justify-center cursor-pointer p-0.5 hover:bg-[#505050]">
+					<svg xmlns="http://www.w3.org/2000/svg" height="48px" viewBox="0 -960 960 960" width="48px" fill="#FFFFFF"><path d="M180-120q-24 0-42-18t-18-42v-600q0-24 18-42t42-18h299v60H180v600h299v60H180Zm486-185-43-43 102-102H360v-60h363L621-612l43-43 176 176-174 174Z"/></svg>
+				</button>
+			</div>
+		{:else if !accountStatus}
 			<a href="/auth"><button class="bg-[#3A3A3A] rounded-[15px] flex items-center justify-center cursor-pointer p-0.5 hover:bg-[#505050]">
 				<!-- Log in -->
 				 <svg xmlns="http://www.w3.org/2000/svg" height="48px" viewBox="0 -960 960 960" width="48px" fill="#FFFFFF"><path d="M481-120v-60h299v-600H481v-60h299q24 0 42 18t18 42v600q0 24-18 42t-42 18H481Zm-55-185-43-43 102-102H120v-60h363L381-612l43-43 176 176-174 174Z"/></svg>
@@ -74,12 +124,12 @@
 				<a href="/community/{community.id}" class="w-full flex items-center justify-center"><button class="w-4/5 h-fit p-2 bg-[#3A3A3A] hover:bg-[#505050] text-white cursor-pointer rounded-[15px]">{community.name}</button></a>
 			{/each}
 		{:else if !accountStatus}
-			<p class="font-bold text-4xl">Login to be able to access communities!</p>
-		{:else}
-			<p class="font-bold text-4xl">You aren't a part of any community. Join one today!</p>
+			<p class="font-bold ml-1 text-white">Login to be able to access communities!</p>
+		{:else if accountStatus}
+			<p class="font-bold ml-1 text-white">You aren't a part of any community. Join one today!</p>
 		{/if}
 	</div>
-	<div class="block w-full ">
+	<div class="block w-full">
 		{@render children()}
 	</div>
 </div>
