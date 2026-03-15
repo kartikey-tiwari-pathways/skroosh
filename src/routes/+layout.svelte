@@ -14,6 +14,7 @@
 
 	onAuthStateChanged(auth, user => {
 		accountStatus = !!user;
+		if (!accountStatus) return 0;
 		getUsername(user);
 		getUserCommunities();
 	});

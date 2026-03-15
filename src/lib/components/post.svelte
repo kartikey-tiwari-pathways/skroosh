@@ -2,6 +2,7 @@
     import { db } from "$lib";
     import userImage from "$lib/assets/user.png";
     import { doc, getDoc } from "firebase/firestore";
+    import { setContext } from "svelte";
     let { id } = $props();
 
     let visible = $state(false);
@@ -34,8 +35,13 @@
     }
     getPostData() // Uncomment when actually working on it
 </script>
+<style>
+    a {
+        transition: all 100ms;
+    }
+</style>
 {#if visible}
-    <div class="bg-[#E8E8E8] w-1/2 h-fit p-6 rounded-[15px]">
+    <a href="/posts/{id}" class="bg-[#E8E8E8] w-1/2 h-fit p-6 rounded-[15px] cursor-pointer hover:bg-[#DCDCDC]">
         <div class="flex items-center gap-2">
             <img src={userImage} alt="user" class="w-10 h-10 rounded-full">
             <span>
@@ -45,5 +51,5 @@
         </div>
         <p class="text-2xl">{postData.title}</p>
         <p class="text-base">{postData.content}</p>
-    </div>
+    </a>
 {/if}
